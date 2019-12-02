@@ -1,0 +1,6 @@
+endpoint: https://us1.prisma.sh/michael-frenkel-e7668c/sick-fits/dev
+datamodel: datamodel.graphql
+
+generate:
+  - generator: javascript-client
+    output: ./generated/prisma-client/

@@ -16,14 +16,17 @@ const SIGNUP_MUTATION = gql`
 `;
 
 class Signup extends Component {
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     name: '',
     email: '',
     password: '',
   };
+
   saveToState = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
+
   render() {
     return (
       <Mutation

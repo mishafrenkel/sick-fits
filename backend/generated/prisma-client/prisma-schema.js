@@ -3,7 +3,11 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateItem {
+/* GraphQL */ `type AggregateCartItem {
+  count: Int!
+}
+
+type AggregateItem {
   count: Int!
 }
 
@@ -15,13 +19,188 @@ type BatchPayload {
   count: Long!
 }
 
+type CartItem {
+  id: ID!
+  quantity: Int!
+  item: Item!
+  user: User!
+}
+
+type CartItemConnection {
+  pageInfo: PageInfo!
+  edges: [CartItemEdge]!
+  aggregate: AggregateCartItem!
+}
+
+input CartItemCreateInput {
+  id: ID
+  quantity: Int
+  item: ItemCreateOneInput!
+  user: UserCreateOneWithoutCartInput!
+}
+
+input CartItemCreateManyWithoutUserInput {
+  create: [CartItemCreateWithoutUserInput!]
+  connect: [CartItemWhereUniqueInput!]
+}
+
+input CartItemCreateWithoutUserInput {
+  id: ID
+  quantity: Int
+  item: ItemCreateOneInput!
+}
+
+type CartItemEdge {
+  node: CartItem!
+  cursor: String!
+}
+
+enum CartItemOrderByInput {
+  id_ASC
+  id_DESC
+  quantity_ASC
+  quantity_DESC
+}
+
+type CartItemPreviousValues {
+  id: ID!
+  quantity: Int!
+}
+
+input CartItemScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  quantity: Int
+  quantity_not: Int
+  quantity_in: [Int!]
+  quantity_not_in: [Int!]
+  quantity_lt: Int
+  quantity_lte: Int
+  quantity_gt: Int
+  quantity_gte: Int
+  AND: [CartItemScalarWhereInput!]
+  OR: [CartItemScalarWhereInput!]
+  NOT: [CartItemScalarWhereInput!]
+}
+
+type CartItemSubscriptionPayload {
+  mutation: MutationType!
+  node: CartItem
+  updatedFields: [String!]
+  previousValues: CartItemPreviousValues
+}
+
+input CartItemSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CartItemWhereInput
+  AND: [CartItemSubscriptionWhereInput!]
+  OR: [CartItemSubscriptionWhereInput!]
+  NOT: [CartItemSubscriptionWhereInput!]
+}
+
+input CartItemUpdateInput {
+  quantity: Int
+  item: ItemUpdateOneRequiredInput
+  user: UserUpdateOneRequiredWithoutCartInput
+}
+
+input CartItemUpdateManyDataInput {
+  quantity: Int
+}
+
+input CartItemUpdateManyMutationInput {
+  quantity: Int
+}
+
+input CartItemUpdateManyWithoutUserInput {
+  create: [CartItemCreateWithoutUserInput!]
+  delete: [CartItemWhereUniqueInput!]
+  connect: [CartItemWhereUniqueInput!]
+  set: [CartItemWhereUniqueInput!]
+  disconnect: [CartItemWhereUniqueInput!]
+  update: [CartItemUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [CartItemUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [CartItemScalarWhereInput!]
+  updateMany: [CartItemUpdateManyWithWhereNestedInput!]
+}
+
+input CartItemUpdateManyWithWhereNestedInput {
+  where: CartItemScalarWhereInput!
+  data: CartItemUpdateManyDataInput!
+}
+
+input CartItemUpdateWithoutUserDataInput {
+  quantity: Int
+  item: ItemUpdateOneRequiredInput
+}
+
+input CartItemUpdateWithWhereUniqueWithoutUserInput {
+  where: CartItemWhereUniqueInput!
+  data: CartItemUpdateWithoutUserDataInput!
+}
+
+input CartItemUpsertWithWhereUniqueWithoutUserInput {
+  where: CartItemWhereUniqueInput!
+  update: CartItemUpdateWithoutUserDataInput!
+  create: CartItemCreateWithoutUserInput!
+}
+
+input CartItemWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  quantity: Int
+  quantity_not: Int
+  quantity_in: [Int!]
+  quantity_not_in: [Int!]
+  quantity_lt: Int
+  quantity_lte: Int
+  quantity_gt: Int
+  quantity_gte: Int
+  item: ItemWhereInput
+  user: UserWhereInput
+  AND: [CartItemWhereInput!]
+  OR: [CartItemWhereInput!]
+  NOT: [CartItemWhereInput!]
+}
+
+input CartItemWhereUniqueInput {
+  id: ID
+}
+
 type Item {
   id: ID!
-  title: String
-  description: String
+  title: String!
+  description: String!
   image: String
   largeImage: String
-  price: Int
+  price: Int!
   user: User!
 }
 
@@ -33,12 +212,17 @@ type ItemConnection {
 
 input ItemCreateInput {
   id: ID
-  title: String
-  description: String
+  title: String!
+  description: String!
   image: String
   largeImage: String
-  price: Int
+  price: Int!
   user: UserCreateOneInput!
+}
+
+input ItemCreateOneInput {
+  create: ItemCreateInput
+  connect: ItemWhereUniqueInput
 }
 
 type ItemEdge {
@@ -63,11 +247,11 @@ enum ItemOrderByInput {
 
 type ItemPreviousValues {
   id: ID!
-  title: String
-  description: String
+  title: String!
+  description: String!
   image: String
   largeImage: String
-  price: Int
+  price: Int!
 }
 
 type ItemSubscriptionPayload {
@@ -88,6 +272,15 @@ input ItemSubscriptionWhereInput {
   NOT: [ItemSubscriptionWhereInput!]
 }
 
+input ItemUpdateDataInput {
+  title: String
+  description: String
+  image: String
+  largeImage: String
+  price: Int
+  user: UserUpdateOneRequiredInput
+}
+
 input ItemUpdateInput {
   title: String
   description: String
@@ -103,6 +296,18 @@ input ItemUpdateManyMutationInput {
   image: String
   largeImage: String
   price: Int
+}
+
+input ItemUpdateOneRequiredInput {
+  create: ItemCreateInput
+  update: ItemUpdateDataInput
+  upsert: ItemUpsertNestedInput
+  connect: ItemWhereUniqueInput
+}
+
+input ItemUpsertNestedInput {
+  update: ItemUpdateDataInput!
+  create: ItemCreateInput!
 }
 
 input ItemWhereInput {
@@ -197,6 +402,12 @@ input ItemWhereUniqueInput {
 scalar Long
 
 type Mutation {
+  createCartItem(data: CartItemCreateInput!): CartItem!
+  updateCartItem(data: CartItemUpdateInput!, where: CartItemWhereUniqueInput!): CartItem
+  updateManyCartItems(data: CartItemUpdateManyMutationInput!, where: CartItemWhereInput): BatchPayload!
+  upsertCartItem(where: CartItemWhereUniqueInput!, create: CartItemCreateInput!, update: CartItemUpdateInput!): CartItem!
+  deleteCartItem(where: CartItemWhereUniqueInput!): CartItem
+  deleteManyCartItems(where: CartItemWhereInput): BatchPayload!
   createItem(data: ItemCreateInput!): Item!
   updateItem(data: ItemUpdateInput!, where: ItemWhereUniqueInput!): Item
   updateManyItems(data: ItemUpdateManyMutationInput!, where: ItemWhereInput): BatchPayload!
@@ -238,6 +449,9 @@ enum Permission {
 }
 
 type Query {
+  cartItem(where: CartItemWhereUniqueInput!): CartItem
+  cartItems(where: CartItemWhereInput, orderBy: CartItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartItem]!
+  cartItemsConnection(where: CartItemWhereInput, orderBy: CartItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartItemConnection!
   item(where: ItemWhereUniqueInput!): Item
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item]!
   itemsConnection(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemConnection!
@@ -248,6 +462,7 @@ type Query {
 }
 
 type Subscription {
+  cartItem(where: CartItemSubscriptionWhereInput): CartItemSubscriptionPayload
   item(where: ItemSubscriptionWhereInput): ItemSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
@@ -256,10 +471,11 @@ type User {
   id: ID!
   name: String!
   email: String!
-  password: String
+  password: String!
   resetToken: String
   resetTokenExpiry: String
   permissions: [Permission!]!
+  cart(where: CartItemWhereInput, orderBy: CartItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartItem!]
 }
 
 type UserConnection {
@@ -272,10 +488,11 @@ input UserCreateInput {
   id: ID
   name: String!
   email: String!
-  password: String
+  password: String!
   resetToken: String
   resetTokenExpiry: String
   permissions: UserCreatepermissionsInput
+  cart: CartItemCreateManyWithoutUserInput
 }
 
 input UserCreateOneInput {
@@ -283,8 +500,23 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutCartInput {
+  create: UserCreateWithoutCartInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreatepermissionsInput {
   set: [Permission!]
+}
+
+input UserCreateWithoutCartInput {
+  id: ID
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: UserCreatepermissionsInput
 }
 
 type UserEdge {
@@ -311,7 +543,7 @@ type UserPreviousValues {
   id: ID!
   name: String!
   email: String!
-  password: String
+  password: String!
   resetToken: String
   resetTokenExpiry: String
   permissions: [Permission!]!
@@ -342,6 +574,7 @@ input UserUpdateDataInput {
   resetToken: String
   resetTokenExpiry: String
   permissions: UserUpdatepermissionsInput
+  cart: CartItemUpdateManyWithoutUserInput
 }
 
 input UserUpdateInput {
@@ -351,6 +584,7 @@ input UserUpdateInput {
   resetToken: String
   resetTokenExpiry: String
   permissions: UserUpdatepermissionsInput
+  cart: CartItemUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
@@ -369,13 +603,34 @@ input UserUpdateOneRequiredInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutCartInput {
+  create: UserCreateWithoutCartInput
+  update: UserUpdateWithoutCartDataInput
+  upsert: UserUpsertWithoutCartInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdatepermissionsInput {
   set: [Permission!]
+}
+
+input UserUpdateWithoutCartDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: UserUpdatepermissionsInput
 }
 
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutCartInput {
+  update: UserUpdateWithoutCartDataInput!
+  create: UserCreateWithoutCartInput!
 }
 
 input UserWhereInput {
@@ -463,6 +718,9 @@ input UserWhereInput {
   resetTokenExpiry_not_starts_with: String
   resetTokenExpiry_ends_with: String
   resetTokenExpiry_not_ends_with: String
+  cart_every: CartItemWhereInput
+  cart_some: CartItemWhereInput
+  cart_none: CartItemWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
